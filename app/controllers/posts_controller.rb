@@ -4,7 +4,7 @@ class PostsController < ApplicationController
 
   post '/posts' do
     @board = Board.find_by(id: params[:board][:id])
-    if logged_in?
+    if logged_in? && current_user
       @post = Post.create(content: params[:post][:content])
       @user = current_user
       @post.user = @user
@@ -22,7 +22,7 @@ class PostsController < ApplicationController
   patch '/posts/:id' do
     @post = Post.find_by(id: params[:id])
     @user = @post.user
-    if logged_in?
+    if logged_in? && @user == current_user
       @post.update(content: params[:post][:content]) unless params[:post][:content].blank?
       flash[:message] = "Your post has been updated."
       redirect to "/users/#{@user.id}"
