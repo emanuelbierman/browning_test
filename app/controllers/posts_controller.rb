@@ -35,7 +35,7 @@ class PostsController < ApplicationController
   delete '/posts/:id' do
     @post = Post.find_by(id: params[:id])
     @user = @post.user
-    if logged_in?
+    if logged_in? && @user == current_user
       @post.destroy
       flash[:message] = "Your post has been deleted."
       redirect to "/users/#{@user.id}"
